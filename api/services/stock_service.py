@@ -6,6 +6,7 @@ from pytz import timezone
 now_utc = datetime.now(timezone("UTC"))
 today = now_utc.astimezone(timezone("America/Argentina/Buenos_Aires"))
 yesterday = today - timedelta(days=1)
+day_before_yesterday = today - timedelta(days=2)
 API_KEY = os.getenv("API_KEY")
 URL = os.getenv("URL")
 
@@ -35,9 +36,12 @@ def stock_service(symbol: str):
     
     response = requests.get(URL, params=params)
     if response.ok:
-        json_response_today = response.json()["Time Series (Daily)"][today.strftime('%Y-%m-%d')]
-        json_response_yesterday = response.json()["Time Series (Daily)"][yesterday.strftime('%Y-%m-%d')]
-        
+        try:
+            json_response_today = response.json()["Time Series (Daily)"][today.strftime('%Y-%m-%d')]
+            json_response_yesterday = response.json()["Time Series (Daily)"][yesterday.strftime('%Y-%m-%d')]
+        except:
+            json_response_today = response.json()["Time Series (Daily)"][yesterday.strftime('%Y-%m-%d')]
+            json_response_yesterday = response.json()["Time Series (Daily)"][day_before_yesterday.strftime('%Y-%m-%d')]
         close_diff = (float(json_response_today['4. close']) - float(json_response_yesterday['4. close']))
 
         return {
