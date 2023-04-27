@@ -74,3 +74,6 @@ The API is throttled using the following rules:
 Every API call received is logged with the following format:
 
 `INFO:     2023-05-02 08:30:00,000 - GET http://localhost:8080/stock/META (Status: 200)`
+
+### Demo
+https://eureka-test-1k2t.onrender.com/

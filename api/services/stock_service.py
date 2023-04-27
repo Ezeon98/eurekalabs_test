@@ -10,10 +10,11 @@ day_before_yesterday = today - timedelta(days=2)
 API_KEY = os.getenv("API_KEY")
 URL = os.getenv("URL")
 
+
 def stock_service(symbol: str):
-    
     """
-    This function takes a stock symbol and returns the opening price, highest price, lowest price and variation of the
+    This function takes a stock symbol and returns the opening price, highest price,
+    lowest price and variation of the
     closing price of the stock for the current day compared to the previous day.
 
     Args:
@@ -24,33 +25,40 @@ def stock_service(symbol: str):
         - "Open price": The opening price of the stock for the current day.
         - "Higher price": The highest price of the stock for the current day.
         - "Lower price": The lowest price of the stock for the current day.
-        - "Variation Close price": The variation of the closing price of the stock for the current day compared to the previous day.
+        - "Variation Close price": The variation of the closing price of the stock
+                                   for the current day compared to the previous day.
     """
 
     params = {
-    "function": "TIME_SERIES_DAILY_ADJUSTED",
-    "symbol": symbol,
-    "outputsize": "compact",
-    "apikey": API_KEY
-}
-    
+        "function": "TIME_SERIES_DAILY_ADJUSTED",
+        "symbol": symbol,
+        "outputsize": "compact",
+        "apikey": API_KEY,
+    }
+
     response = requests.get(URL, params=params)
     if response.ok:
         try:
-            json_response_today = response.json()["Time Series (Daily)"][today.strftime('%Y-%m-%d')]
-            json_response_yesterday = response.json()["Time Series (Daily)"][yesterday.strftime('%Y-%m-%d')]
-        except:
-            json_response_today = response.json()["Time Series (Daily)"][yesterday.strftime('%Y-%m-%d')]
-            json_response_yesterday = response.json()["Time Series (Daily)"][day_before_yesterday.strftime('%Y-%m-%d')]
-        close_diff = (float(json_response_today['4. close']) - float(json_response_yesterday['4. close']))
+            json_response_today = response.json()["Time Series (Daily)"][today.strftime("%Y-%m-%d")]
+            json_response_yesterday = response.json()["Time Series (Daily)"][
+                yesterday.strftime("%Y-%m-%d")
+            ]
+        except Exception:
+            json_response_today = response.json()["Time Series (Daily)"][
+                yesterday.strftime("%Y-%m-%d")
+            ]
+            json_response_yesterday = response.json()["Time Series (Daily)"][
+                day_before_yesterday.strftime("%Y-%m-%d")
+            ]
+        close_diff = float(json_response_today["4. close"]) - float(
+            json_response_yesterday["4. close"]
+        )
 
         return {
             "Open price": json_response_today["1. open"],
-            "Higher price": json_response_today["2. high"], 
+            "Higher price": json_response_today["2. high"],
             "Lower price": json_response_today["3. low"],
-            "Variation Close price": round(close_diff, 3)
-            }
+            "Variation Close price": round(close_diff, 3),
+        }
     else:
         return response.json()
-
-
