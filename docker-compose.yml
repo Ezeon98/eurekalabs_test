@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    environment:
+      - API_KEY=X86NOH6II01P7R24
+      - URL=https://www.alphavantage.co/query

@@ -1,0 +1,8 @@
+requests
+fastapi==0.62.0
+python-decouple==3.3
+uvicorn==0.12.3
+pydantic
+email-validator
+slowapi
+pytz
