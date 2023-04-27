@@ -7,6 +7,10 @@ app = FastAPI()
 
 app.middleware("http")(log_requests)
 
+@app.get("/")
+async def root():
+    return {"Test": "Eureka Labs"}
+
 # Rutas de la aplicación
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 
