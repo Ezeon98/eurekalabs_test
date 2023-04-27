@@ -25,27 +25,33 @@ The API will be available at http://localhost:8080/. You can test it using a too
 ### Sign Up for an API Key
 To sign up for an API key, make a POST request to /signup with a JSON payload containing your name, last name, and email:
 
-`curl -X POST \
+```bash
+curl -X POST \
 http://localhost:8080/signup \
   -H 'Content-Type: application/json' \
   -d '{
     "name": "John",
     "last_name": "Doe",
     "email": "john.doe@example.com"
-}'`
+}'
+```
 
 The response will contain your API key:
 
-`{
+```json
+{
     "api_key": "57d5a5f5d48b1c09b2ab59d78c0c96d0c716f99d8e5d6527a96a19664c5b5bb8"
-}`
+}
+```
 
 ### Get Stock Market Information
 To get stock market information, make a GET request to /stock/{symbol} with the X-API-Key header set to your API key:
 
-`curl -X GET \
+```bash 
+  curl -X GET \
   http://localhost:8000/stock/META \
-  -H 'X-API-Key: 57d5a5f5d48b1c09b2ab59d78c0c96d0c716f99d8e5d6527a96a19664c5b5bb8'`
+  -H 'X-API-Key: 57d5a5f5d48b1c09b2ab59d78c0c96d0c716f99d8e5d6527a96a19664c5b5bb8'
+  ```
 
 The response will contain the open price, high price, low price, and variation between the last 2 closing price values for the specified stock symbol:
 
@@ -61,8 +67,8 @@ The response will contain the open price, high price, low price, and variation b
 ### API Throttling
 The API is throttled using the following rules:
 
-**/signup** : 7 requests per minute.
-**/stock **: 5 requests per minute.
+**/signup**: 7 requests per minute.
+**/stock**: 5 requests per minute.
 
 ### Logging
 Every API call received is logged with the following format:
